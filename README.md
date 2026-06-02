@@ -1,9 +1,11 @@
 Retail Sales Analysis (SQL)
 
 Project Overview
+
 A clean, focused SQL project demonstrating database setup, data cleaning, exploratory data analysis (EDA), and 10 analytical business queries on a retail sales dataset.
 
 Database Schema
+
 CREATE TABLE retail_sales (
     transactions_id INT PRIMARY KEY,
     sale_date DATE,	
@@ -19,7 +21,9 @@ CREATE TABLE retail_sales (
 );
 
 Data Cleaning & Preparation
+
 -- Identify records with missing values
+
 SELECT * FROM retail_sales
 WHERE 
     transactions_id IS NULL OR sale_date IS NULL OR sale_time IS NULL OR
@@ -28,6 +32,7 @@ WHERE
     cogs IS NULL OR total_sale IS NULL;
 
 -- Remove rows with missing numerical data
+
 DELETE FROM retail_sales
 WHERE 
     quantity IS NULL OR 
@@ -36,6 +41,7 @@ WHERE
     total_sale IS NULL;
 
 Exploratory Data Analysis (EDA)
+
 -- Unique customer count
 SELECT COUNT(DISTINCT customer_id) AS unique_customers FROM retail_sales;
 
@@ -46,16 +52,19 @@ SELECT DISTINCT category FROM retail_sales;
 SELECT COUNT(*) AS total_orders FROM retail_sales;
 
 Business Analytical Queries & Solutions
+
 Q1. Retrieve all sales made on '2022-11-05'
 SELECT * FROM retail_sales WHERE sale_date = '2022-11-05';
 
 Q2. Retrieve transactions where category is 'Clothing', quantity >= 4, and date is in November 2022
+
 SELECT * FROM retail_sales
 WHERE category = 'Clothing'
   AND TO_CHAR(sale_date, 'YYYY-MM') = '2022-11'
   AND quantity >= 4;
 
 Q3. Calculate total sales (net_sale) and total orders for each category
+
 SELECT 
     category,
     SUM(total_sale) AS net_sale,
@@ -64,14 +73,17 @@ FROM retail_sales
 GROUP BY category;
 
 Q4. Find the average age of customers who purchased from 'Beauty'
+
 SELECT ROUND(AVG(age), 2) AS avg_age
 FROM retail_sales
 WHERE category = 'Beauty';
 
 Q5. Find all transactions where total_sale is greater than 1000
+
 SELECT * FROM retail_sales WHERE total_sale > 1000;
 
 Q6. Find total transactions made by each gender in each category
+
 SELECT 
     category,
     gender,
@@ -81,6 +93,7 @@ GROUP BY category, gender
 ORDER BY category;
 
 Q7. Calculate average monthly sales and retrieve the best-selling month in each year
+
 SELECT year, month, avg_sale
 FROM (    
     SELECT 
@@ -97,6 +110,7 @@ FROM (
 WHERE rank = 1;
 
 Q8. Find the top 5 customers based on highest total sales
+
 SELECT 
     customer_id,
     SUM(total_sale) AS total_sales
@@ -106,6 +120,7 @@ ORDER BY total_sales DESC
 LIMIT 5;
 
 Q9. Find unique customer count for each product category
+
 SELECT 
     category,    
     COUNT(DISTINCT customer_id) AS unique_customers
@@ -113,6 +128,7 @@ FROM retail_sales
 GROUP BY category;
 
 Q10. Segment orders into shift classifications (Morning <12, Afternoon 12-17, Evening >17)
+
 WITH hourly_sales AS (
     SELECT *,
         CASE
